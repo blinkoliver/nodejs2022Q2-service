@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DataBase } from 'src/database/database';
@@ -34,13 +34,17 @@ export class UsersService {
 
   update = async (id: string, updateUserDto: UpdateUserDto) => {
     const user = await this.findOne(id);
-    const data = {
-      ...user,
-      password: updateUserDto.newPassword,
-      version: user.version + 1,
-      updatedAt: Date.now(),
-    };
-    return this.db.update(id, data);
+    if (updateUserDto.oldPassword === user.password) {
+      const data = {
+        ...user,
+        password: updateUserDto.newPassword,
+        version: user.version + 1,
+        updatedAt: Date.now(),
+      };
+      return this.db.update(id, data);
+    } else {
+      throw new ForbiddenException();
+    }
   };
 
   remove = async (id: string) => {

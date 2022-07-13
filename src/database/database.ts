@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 interface Instance {
   id: string;
 }
@@ -23,17 +24,20 @@ export class DataBase<Entity extends Instance> {
   };
 
   read = async (id: string): Promise<Entity> => {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       const data = this.db.find((el: Entity) => el.id === id);
-      resolve(data);
+      data ? resolve(data) : reject(new NotFoundException());
     });
   };
 
   update = async (id: string, updateData: Entity): Promise<Entity> => {
     return new Promise(async (resolve) => {
-      const newData = new this.instance(updateData);
-      this.db = this.db.map((el: Entity) => (el.id === id ? newData : el));
-      resolve(newData);
+      const desired = await this.read(id);
+      if (desired) {
+        const newData = new this.instance(updateData);
+        this.db = this.db.map((el: Entity) => (el.id === id ? newData : el));
+        resolve(newData);
+      }
     });
   };
 
