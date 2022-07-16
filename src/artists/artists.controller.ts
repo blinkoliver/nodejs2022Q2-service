@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   HttpCode,
@@ -40,7 +40,7 @@ export class ArtistsController {
     }
   }
 
-  @Patch(':id')
+  @Put(':id')
   @HttpCode(200)
   update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
     if (validate(id)) {
