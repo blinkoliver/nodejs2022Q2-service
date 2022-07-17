@@ -25,6 +25,7 @@ export class DataBase<Entity extends Instance> {
 
   read = async (id: string): Promise<Entity> => {
     return new Promise(async (resolve, reject) => {
+      console.log('db', this.db);
       const data = this.db.find((el: Entity) => el.id === id);
       data ? resolve(data) : reject(new NotFoundException());
     });

@@ -1,15 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { DataBase } from 'src/database/database';
 import { v4 } from 'uuid';
 import { Album } from './entities/album.entity';
+import { TracksService } from 'src/tracks/tracks.service';
+import { ArtistsService } from 'src/artists/artists.service';
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class AlbumsService {
   private db: DataBase<Album>;
 
-  constructor() {
+  constructor(
+    @Inject(forwardRef(() => TracksService))
+    private tracksServices: TracksService,
+    @Inject(forwardRef(() => ArtistsService))
+    private artistsServices: ArtistsService,
+    @Inject(forwardRef(() => FavoritesService))
+    private favoritesServices: FavoritesService,
+  ) {
     this.db = new DataBase<Album>(Album);
   }
 
@@ -42,6 +52,7 @@ export class AlbumsService {
 
   remove = async (id: string) => {
     await this.findOne(id);
+    // this.favoritesServices.deleteAlbum(id);
     return this.db.delete(id);
   };
 }
