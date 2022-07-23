@@ -24,11 +24,7 @@ export class AlbumsService {
   }
 
   create(createAlbumDto: CreateAlbumDto) {
-    const albumWithId = {
-      id: v4(),
-      ...createAlbumDto,
-    };
-    return this.db.create(albumWithId);
+    // return this.db.create();
   }
 
   findAll() {
@@ -40,19 +36,19 @@ export class AlbumsService {
   }
 
   update = async (id: string, updateAlbumDto: UpdateAlbumDto) => {
-    const album = await this.findOne(id);
-    const updatedData = {
-      ...album,
-    };
-    Object.keys(updateAlbumDto).forEach((el) => {
-      updatedData[el] = updateAlbumDto[el];
-    });
-    return this.db.update(id, updatedData);
+    // const album = await this.findOne(id);
+    // const updatedData = {
+    //   ...album,
+    // };
+    // Object.keys(updateAlbumDto).forEach((el) => {
+    //   updatedData[el] = updateAlbumDto[el];
+    // });
+    // return this.db.update(id, updatedData);
   };
 
   remove = async (id: string) => {
-    await this.findOne(id);
-    // this.favoritesServices.deleteAlbum(id);
-    return this.db.delete(id);
+    // await this.findOne(id);
+    // // this.favoritesServices.deleteAlbum(id);
+    // return this.db.delete(id);
   };
 }

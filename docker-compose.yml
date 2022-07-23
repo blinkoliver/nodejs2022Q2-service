@@ -1,41 +1,50 @@
 version: '3.3'
 services:
   server:
-    container_name: rest-service-server
+    image: blinkoliver/rest-api-server
+    container_name: rest-api-server
     build: .
     ports:
       - ${PORT}:${PORT}
     depends_on:
-      - database
+      - db
     environment:
+      - DB_TYPE=${DB_TYPE}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASS=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_SYNC=false
+      - JWT_SECRET=${JWT_SECRET}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - APP_EXPIRES=${APP_EXPIRES}
       - PORT=${PORT}
-      #
     volumes:
-      - /usr/src/app
+      - .:/usr/src/app
       - /usr/src/app/node_modules
     networks:
       - rest-network
     restart: unless-stopped
     command: npm start
-  database:
-    container_name: rest-service-database
+  db:
+    image: blinkoliver/rest-api-db
+    restart: unless-stopped
+    container_name: rest-api-db
     build: ./db/
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      # 
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     command: postgres -c logging_collector=on
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     networks:
       - rest-network
-    restart: always
 
 networks:
   rest-network:
     driver: bridge
 volumes:
-  postgres:
+  pgdata:

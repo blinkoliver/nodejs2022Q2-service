@@ -28,29 +28,29 @@ export class FavoritesService {
   }
 
   addTrack = async (trackId: string) => {
-    console.log('service', trackId);
-    const track = await this.tracksService.findOne(trackId);
-    if (track) {
-      return FavoritesService.db.tracks.push(trackId);
-    } else {
-      throw new UnprocessableEntityException();
-    }
+    // console.log('service', trackId);
+    // const track = await this.tracksService.findOne(trackId);
+    // if (track) {
+    //   return FavoritesService.db.tracks.push(trackId);
+    // } else {
+    //   throw new UnprocessableEntityException();
+    // }
   };
   addArtist = async (artistId: string) => {
-    const artist = await this.artistsService.findOne(artistId);
-    if (artist) {
-      return FavoritesService.db.artist.push(artistId);
-    } else {
-      throw new UnprocessableEntityException();
-    }
+    // const artist = await this.artistsService.findOne(artistId);
+    // if (artist) {
+    //   return FavoritesService.db.artist.push(artistId);
+    // } else {
+    //   throw new UnprocessableEntityException();
+    // }
   };
   addAlbum = async (albumId: string) => {
-    const album = await this.albumsService.findOne(albumId);
-    if (album) {
-      return FavoritesService.db.album.push(album);
-    } else {
-      throw new UnprocessableEntityException();
-    }
+    // const album = await this.albumsService.findOne(albumId);
+    // if (album) {
+    //   return FavoritesService.db.album.push(album);
+    // } else {
+    //   throw new UnprocessableEntityException();
+    // }
   };
 
   deleteArtist(id: string): void {

@@ -1,8 +1,13 @@
-export class Artist {
-  constructor(partial: Partial<Artist>) {
-    Object.assign(this, partial);
-  }
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class Artist extends BaseEntity {
+  @PrimaryGeneratedColumn()
   id: string;
+
+  @Column()
   name: string;
+
+  @Column()
   grammy: boolean;
 }

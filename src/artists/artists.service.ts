@@ -23,35 +23,35 @@ export class ArtistsService {
   }
 
   create(createArtistDto: CreateArtistDto) {
-    const artistWithId = {
-      id: v4(),
-      ...createArtistDto,
-    };
-    return this.db.create(artistWithId);
+    // const artistWithId = {
+    //   id: v4(),
+    //   ...createArtistDto,
+    // };
+    // return this.db.create(artistWithId);
   }
 
   findAll() {
-    return this.db.readAll();
+    // return this.db.readAll();
   }
 
   findOne(id: string) {
-    return this.db.read(id);
+    // return this.db.read(id);
   }
 
   update = async (id: string, updateArtistDto: UpdateArtistDto) => {
-    const track = await this.findOne(id);
-    const updatedData = {
-      ...track,
-    };
-    Object.keys(updateArtistDto).forEach((el) => {
-      updatedData[el] = updateArtistDto[el];
-    });
-    return this.db.update(id, updatedData);
+    // const track = await this.findOne(id);
+    // const updatedData = {
+    //   ...track,
+    // };
+    // Object.keys(updateArtistDto).forEach((el) => {
+    //   updatedData[el] = updateArtistDto[el];
+    // });
+    // return this.db.update(id, updatedData);
   };
 
   remove = async (id: string) => {
-    await this.findOne(id);
-    // this.favoritesService.deleteArtist(id);
-    return this.db.delete(id);
+    //   await this.findOne(id);
+    //   // this.favoritesService.deleteArtist(id);
+    //   return this.db.delete(id);
   };
 }

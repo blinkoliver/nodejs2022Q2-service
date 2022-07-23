@@ -1,9 +1,16 @@
-export class Album {
-  constructor(partial: Partial<Album>) {
-    Object.assign(this, partial);
-  }
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class Album extends BaseEntity {
+  @PrimaryGeneratedColumn()
   id: string;
+
+  @Column()
   name: string;
+
+  @Column()
   year: number;
+
+  @Column()
   artistId: string | null;
 }

@@ -1,4 +1,4 @@
-FROM node:16.15-alpine3.16
+FROM node:lts-alpine3.16
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN ["npm", "ci", "--legacy-peer-deps"]

@@ -24,11 +24,7 @@ export class TracksService {
   }
 
   create = (createTrackDto: CreateTrackDto) => {
-    const trackWithId = {
-      id: v4(),
-      ...createTrackDto,
-    };
-    return this.db.create(trackWithId);
+    // return this.db.create(createTrackDto);
   };
 
   findAll = () => {
@@ -41,14 +37,14 @@ export class TracksService {
   };
 
   update = async (id: string, updateTrackDto: UpdateTrackDto) => {
-    const track = await this.findOne(id);
-    const updatedData = {
-      ...track,
-    };
-    Object.keys(updateTrackDto).forEach((el) => {
-      updatedData[el] = updateTrackDto[el];
-    });
-    return this.db.update(id, updatedData);
+    // const track = await this.findOne(id);
+    // const updatedData = {
+    //   ...track,
+    // };
+    // Object.keys(updateTrackDto).forEach((el) => {
+    //   updatedData[el] = updateTrackDto[el];
+    // });
+    // return this.db.update(id, updatedData);
   };
 
   remove = async (id: string) => {
