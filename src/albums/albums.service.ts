@@ -1,54 +1,52 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { DataBase } from 'src/database/database';
-import { v4 } from 'uuid';
 import { Album } from './entities/album.entity';
-import { TracksService } from 'src/tracks/tracks.service';
-import { ArtistsService } from 'src/artists/artists.service';
-import { FavoritesService } from 'src/favorites/favorites.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AlbumsService {
-  private db: DataBase<Album>;
-
   constructor(
-    @Inject(forwardRef(() => TracksService))
-    private tracksServices: TracksService,
-    @Inject(forwardRef(() => ArtistsService))
-    private artistsServices: ArtistsService,
-    @Inject(forwardRef(() => FavoritesService))
-    private favoritesServices: FavoritesService,
-  ) {
-    this.db = new DataBase<Album>(Album);
-  }
+    @InjectRepository(Album)
+    private readonly albumRepository: Repository<Album>,
+  ) {}
 
-  create(createAlbumDto: CreateAlbumDto) {
-    // return this.db.create();
-  }
+  create = async (createAlbumDto: CreateAlbumDto) => {
+    const createdAlbum = this.albumRepository.create(createAlbumDto);
+    return (await this.albumRepository.save(createdAlbum)).toResponse();
+  };
 
-  findAll() {
-    return this.db.readAll();
-  }
+  findAll = async () => {
+    const albums = await this.albumRepository.find();
+    return albums.map((el) => el.toResponse());
+  };
 
-  findOne(id: string) {
-    return this.db.read(id);
-  }
+  findOne = async (id: string) => {
+    const album = await this.albumRepository.findOne({ where: { id: id } });
+    if (album) {
+      return album.toResponse();
+    } else {
+      throw new NotFoundException('Album with this id not found');
+    }
+  };
 
   update = async (id: string, updateAlbumDto: UpdateAlbumDto) => {
-    // const album = await this.findOne(id);
-    // const updatedData = {
-    //   ...album,
-    // };
-    // Object.keys(updateAlbumDto).forEach((el) => {
-    //   updatedData[el] = updateAlbumDto[el];
-    // });
-    // return this.db.update(id, updatedData);
+    const updatedAlbum = await this.albumRepository.findOne({
+      where: { id: id },
+    });
+    if (updatedAlbum) {
+      Object.assign(updatedAlbum, updateAlbumDto);
+      return await this.albumRepository.save(updatedAlbum);
+    } else {
+      throw new NotFoundException('Album with this id not found');
+    }
   };
 
   remove = async (id: string) => {
-    // await this.findOne(id);
-    // // this.favoritesServices.deleteAlbum(id);
-    // return this.db.delete(id);
+    const result = await this.albumRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('Album with this id not found');
+    }
   };
 }

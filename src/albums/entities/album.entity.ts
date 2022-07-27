@@ -13,4 +13,9 @@ export class Album extends BaseEntity {
 
   @Column()
   artistId: string | null;
+
+  toResponse() {
+    const { id } = this;
+    return { id };
+  }
 }

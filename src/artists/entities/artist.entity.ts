@@ -10,4 +10,9 @@ export class Artist extends BaseEntity {
 
   @Column()
   grammy: boolean;
+
+  toResponse() {
+    const { id } = this;
+    return { id };
+  }
 }
