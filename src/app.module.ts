@@ -8,17 +8,17 @@ import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
 import { ArtistsModule } from './artists/artists.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import configService from './typeorm.config';
+import { appDataSource } from './typeorm.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
-    TracksModule,
-    AlbumsModule,
-    FavoritesModule,
-    ArtistsModule,
-    TypeOrmModule.forRoot(configService),
+    // TracksModule,
+    // AlbumsModule,
+    // FavoritesModule,
+    // ArtistsModule,
+    TypeOrmModule.forRoot(appDataSource.options),
   ],
   controllers: [AppController],
   providers: [AppService],

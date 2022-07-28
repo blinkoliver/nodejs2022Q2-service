@@ -1,7 +1,12 @@
-import { BaseEntity, Column, Entity } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('favorites')
 export class Favorite extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  @Exclude()
+  id: string;
+
   @Column({ type: 'varchar' })
   artists: string[];
 

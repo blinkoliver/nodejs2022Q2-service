@@ -4,4 +4,4 @@ COPY package*.json ./
 RUN ["npm", "ci", "--legacy-peer-deps"]
 COPY . .
 EXPOSE ${PORT}
-CMD [ "npm", "run", "start:dev" ]
+CMD [ "npm", "run", "start" ]

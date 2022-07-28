@@ -1,9 +1,12 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
+  VersionColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
@@ -20,13 +23,13 @@ export class User extends BaseEntity {
   @Exclude()
   password: string;
 
-  @Column()
+  @VersionColumn()
   version: number;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: number;
 
-  @Column()
+  @UpdateDateColumn()
   updatedAt: number;
 
   toResponse() {
