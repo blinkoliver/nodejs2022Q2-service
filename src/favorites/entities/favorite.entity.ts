@@ -1,5 +1,14 @@
 import { Exclude } from 'class-transformer';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Album } from 'src/albums/entities/album.entity';
+import { Artist } from 'src/artists/entities/artist.entity';
+import { Track } from 'src/tracks/entities/track.entity';
+import {
+  BaseEntity,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('favorites')
 export class Favorite extends BaseEntity {
@@ -7,12 +16,15 @@ export class Favorite extends BaseEntity {
   @Exclude()
   id: string;
 
-  @Column({ type: 'varchar' })
-  artists: string[];
+  @ManyToMany(() => Artist, { onDelete: 'CASCADE', eager: true })
+  @JoinTable()
+  artists: Artist[];
 
-  @Column({ type: 'varchar' })
-  albums: string[];
+  @ManyToMany(() => Album, { onDelete: 'CASCADE', eager: true })
+  @JoinTable()
+  albums: Album[];
 
-  @Column({ type: 'varchar' })
-  tracks: string[];
+  @ManyToMany(() => Track, { onDelete: 'CASCADE', eager: true })
+  @JoinTable()
+  tracks: Track[];
 }

@@ -7,56 +7,45 @@ import {
   Param,
   Delete,
   HttpCode,
-  BadRequestException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { validate } from 'uuid';
 
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @HttpCode(201)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto);
   }
 
   @Get()
-  @HttpCode(200)
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @Get(':id')
-  @HttpCode(200)
-  findOne(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.usersService.findOne(id);
-    } else {
-      throw new BadRequestException();
-    }
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return await this.usersService.findOne(id);
   }
 
   @Put(':id')
-  @HttpCode(200)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    if (validate(id)) {
-      return this.usersService.update(id, updateUserDto);
-    } else {
-      throw new BadRequestException();
-    }
+  async update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.usersService.remove(id);
-    } else {
-      throw new BadRequestException();
-    }
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return await this.usersService.remove(id);
   }
 }

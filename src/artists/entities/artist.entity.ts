@@ -1,8 +1,16 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Album } from 'src/albums/entities/album.entity';
+import { Track } from 'src/tracks/entities/track.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity('artist')
 export class Artist extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -11,8 +19,14 @@ export class Artist extends BaseEntity {
   @Column()
   grammy: boolean;
 
+  @OneToMany(() => Album, (album) => album.artist)
+  albums: Album[];
+
+  @OneToMany(() => Track, (track) => track.artist)
+  tracks: Track[];
+
   toResponse() {
-    const { id } = this;
-    return { id };
+    const { id, name, grammy, albums, tracks } = this;
+    return { id, name, grammy, albums, tracks };
   }
 }

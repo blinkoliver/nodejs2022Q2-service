@@ -1,8 +1,18 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Artist } from 'src/artists/entities/artist.entity';
+import { Track } from 'src/tracks/entities/track.entity';
 
-@Entity()
+@Entity('album')
 export class Album extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -11,11 +21,18 @@ export class Album extends BaseEntity {
   @Column()
   year: number;
 
-  @Column()
-  artistId: string | null;
+  @Column({ nullable: true })
+  artistId: string;
+
+  @ManyToMany(() => Artist, (artist) => artist.albums, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'artistId' })
+  artist: Artist;
+
+  @OneToMany(() => Track, (track) => track.albumId)
+  tracks: Track[];
 
   toResponse() {
-    const { id } = this;
-    return { id };
+    const { id, name, year, artistId } = this;
+    return { id, name, year, artistId };
   }
 }

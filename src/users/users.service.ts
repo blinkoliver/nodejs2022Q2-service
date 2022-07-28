@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -13,8 +18,12 @@ export class UsersService {
   ) {}
 
   create = async (createUserDto: CreateUserDto) => {
-    const createdUser = this.userRepository.create(createUserDto);
-    return (await this.userRepository.save(createdUser)).toResponse();
+    try {
+      const createdUser = this.userRepository.create(createUserDto);
+      return (await this.userRepository.save(createdUser)).toResponse();
+    } catch (error) {
+      throw new BadRequestException();
+    }
   };
 
   findAll = async () => {
@@ -35,18 +44,15 @@ export class UsersService {
     const updatedUser = await this.userRepository.findOne({
       where: { id: id },
     });
-    if (updatedUser) {
-      Object.assign(updatedUser, updateUserDto);
-      return await this.userRepository.save(updatedUser);
-    } else {
-      throw new NotFoundException('User with this id not found');
+    if (updatedUser.password !== updateUserDto.oldPassword) {
+      throw new ForbiddenException();
     }
+    updatedUser.password = updateUserDto.newPassword;
+    return (await this.userRepository.save(updatedUser)).toResponse();
   };
 
   remove = async (id: string) => {
-    const result = await this.userRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('User with this id not found');
-    }
+    await this.findOne(id);
+    await this.userRepository.delete(id);
   };
 }

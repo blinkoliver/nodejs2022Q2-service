@@ -15,16 +15,36 @@ export class first1658837251972 implements MigrationInterface {
         CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "track" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "duration" integer NOT NULL, "albumId" uuid, "artistId" uuid, CONSTRAINT "PK_0631b9bcf521f8fab3a15f2c37e" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "track" (
+        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+        "name" character varying NOT NULL,
+        "duration" integer NOT NULL,
+        "albumId" uuid, "artistId" uuid,
+        CONSTRAINT "PK_0631b9bcf521f8fab3a15f2c37e" PRIMARY KEY ("id")
+        )`,
     );
     await queryRunner.query(
-      `CREATE TABLE "artist" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "grammy" boolean NOT NULL, CONSTRAINT "PK_55b76e71568b5db4d01d3e394ed" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "artist" (
+        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+        "name" character varying NOT NULL,
+        "grammy" boolean NOT NULL,
+        CONSTRAINT "PK_55b76e71568b5db4d01d3e394ed" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "album" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "year" integer NOT NULL, "artistId" uuid, CONSTRAINT "PK_58e0b4b8a31bb897e6959fe3206" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "album" (
+        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+        "name" character varying NOT NULL,
+        "year" integer NOT NULL,
+        "artistId" uuid,
+        CONSTRAINT "PK_58e0b4b8a31bb897e6959fe3206" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "favorites" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "albumsIds" text NOT NULL, "artistsIds" text NOT NULL, "tracksIds" text NOT NULL, CONSTRAINT "PK_173e5d5cc35490bf1de2d2d3739" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "favorites" (
+        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+        "albumsIds" text NOT NULL,
+        "artistsIds" text NOT NULL,
+        "tracksIds" text NOT NULL,
+        CONSTRAINT "PK_173e5d5cc35490bf1de2d2d3739" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `ALTER TABLE "track" ADD CONSTRAINT "FK_b105d945c4c185395daca91606a" FOREIGN KEY ("albumId") REFERENCES "album"("id") ON DELETE SET NULL ON UPDATE NO ACTION`,

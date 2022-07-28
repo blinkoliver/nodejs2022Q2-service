@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
@@ -13,8 +17,12 @@ export class AlbumsService {
   ) {}
 
   create = async (createAlbumDto: CreateAlbumDto) => {
-    const createdAlbum = this.albumRepository.create(createAlbumDto);
-    return (await this.albumRepository.save(createdAlbum)).toResponse();
+    try {
+      const createdAlbum = this.albumRepository.create(createAlbumDto);
+      return (await this.albumRepository.save(createdAlbum)).toResponse();
+    } catch (error) {
+      throw new BadRequestException();
+    }
   };
 
   findAll = async () => {
@@ -44,9 +52,7 @@ export class AlbumsService {
   };
 
   remove = async (id: string) => {
-    const result = await this.albumRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('Album with this id not found');
-    }
+    await this.findOne(id);
+    await this.albumRepository.delete(id);
   };
 }
