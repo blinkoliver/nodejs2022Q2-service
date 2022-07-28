@@ -1,31 +1,27 @@
-import {
-  Injectable,
-  UnprocessableEntityException,
-  forwardRef,
-  Inject,
-} from '@nestjs/common';
-import { TracksService } from 'src/tracks/tracks.service';
-import { ArtistsService } from 'src/artists/artists.service';
-import { AlbumsService } from 'src/albums/albums.service';
+import { Injectable } from '@nestjs/common';
+import { Favorite } from './entities/favorite.entity';
+import { Artist } from 'src/artists/entities/artist.entity';
+import { Album } from 'src/albums/entities/album.entity';
+import { Track } from 'src/tracks/entities/track.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 @Injectable()
 export class FavoritesService {
   constructor(
-    @Inject(forwardRef(() => TracksService))
-    private tracksService: TracksService,
-    @Inject(forwardRef(() => ArtistsService))
-    private artistsService: ArtistsService,
-    @Inject(forwardRef(() => AlbumsService))
-    private albumsService: AlbumsService,
+    @InjectRepository(Favorite)
+    private readonly favoritesRepository: Repository<Favorite>,
+    @InjectRepository(Artist)
+    private readonly artistsRepository: Repository<Artist>,
+    @InjectRepository(Album)
+    private readonly albumsRepository: Repository<Album>,
+    @InjectRepository(Track)
+    private readonly tracksRepository: Repository<Track>,
   ) {}
-  private static db: any = {
-    artists: [],
-    albums: [],
-    tracks: [],
-  };
 
-  getFavorites() {
+  getFavorites = async () => {
     return this;
-  }
+  };
 
   addTrack = async (trackId: string) => {
     // console.log('service', trackId);
@@ -53,15 +49,15 @@ export class FavoritesService {
     // }
   };
 
-  deleteArtist(id: string): void {
+  deleteArtist = async (id: string) => {
     console.log(id);
-  }
+  };
 
-  deleteTrack(id: string): void {
+  deleteTrack = async (id: string) => {
     console.log(id);
-  }
+  };
 
-  deleteAlbum(id: string): void {
+  deleteAlbum = (id: string) => {
     console.log(id);
-  }
+  };
 }
