@@ -20,8 +20,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "typeorm:create": "node ./node_modules/typeorm/cli.js migration:create  ./src/migration/first",
-    "typeorm:migration": "node ./node_modules/typeorm/cli.js migration:run -d ./dist/typeorm.config.js"
+    "typeorm:generate": "ts-node ./node_modules/.bin/typeorm migration:generate src/migration -d src/typeorm.config.ts -p",
+    "typeorm:migration": "ts-node ./node_modules/.bin/typeorm migration:run -d src/typeorm.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

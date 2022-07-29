@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import { Album } from './albums/entities/album.entity';
 import { Artist } from './artists/entities/artist.entity';
-import { Favorite } from './favorites/entities/favorite.entity';
+import { Favorites } from './favorites/entities/favorite.entity';
 import { Track } from './tracks/entities/track.entity';
 import { User } from './users/entities/user.entity';
 
@@ -15,10 +15,10 @@ export const appDataSource = new DataSource({
   username: (process.env.POSTGRES_USER as string) || ('postgres' as string),
   password: (process.env.POSTGRES_PASSWORD as string) || ('postgres' as string),
   database: (process.env.POSTGRES_DB as string) || ('users' as string),
-  entities: [User, Album, Artist, Track, Favorite],
+  entities: [User, Album, Artist, Track, Favorites],
   migrationsRun: false,
   logging: true,
-  synchronize: true,
+  synchronize: false,
   subscribers: [],
   migrations: ['dist/migration/**/*.js'],
 });
