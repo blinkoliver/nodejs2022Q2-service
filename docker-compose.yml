@@ -16,6 +16,7 @@ services:
     environment:
       - PORT=${PORT}
     restart: unless-stopped
+    command: sh -c 'npm run typeorm:migration && npm run start:dev'
   postgres:
     container_name: rest-api-db
     image: blinkoliver/rest-api-db
