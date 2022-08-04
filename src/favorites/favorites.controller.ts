@@ -5,75 +5,66 @@ import {
   Param,
   Delete,
   HttpCode,
-  BadRequestException,
+  ParseUUIDPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
-import { validate } from 'uuid';
 
 @Controller('favs')
+@UseInterceptors(ClassSerializerInterceptor)
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
-  @HttpCode(200)
-  getAll() {
-    return this.favoritesService.getFavorites();
+  async getAll() {
+    return await this.favoritesService.getFavorites();
   }
 
   @Post('track/:id')
-  @HttpCode(201)
-  addTrackToFavorites(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.favoritesService.addTrack(id);
-    } else {
-      throw new BadRequestException();
-    }
+  async addTrackToFavorites(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return this.favoritesService.addTrack(id);
   }
+
   @Delete('track/:id')
   @HttpCode(204)
-  deleteTrackFromFavorites(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.favoritesService.deleteTrack(id);
-    } else {
-      throw new BadRequestException();
-    }
+  deleteTrackFromFavorites(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return this.favoritesService.deleteTrack(id);
   }
 
   @Post('album/:id')
   @HttpCode(201)
-  addAlbumToFavorites(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.favoritesService.addAlbum(id);
-    } else {
-      throw new BadRequestException();
-    }
+  addAlbumToFavorites(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return this.favoritesService.addAlbum(id);
   }
+
   @Delete('album/:id')
   @HttpCode(204)
-  deleteAlbumFromFavorites(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.favoritesService.deleteAlbum(id);
-    } else {
-      throw new BadRequestException();
-    }
+  deleteAlbumFromFavorites(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return this.favoritesService.deleteAlbum(id);
   }
 
   @Post('artist/:id')
   @HttpCode(201)
-  addArtistToFavorites(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.favoritesService.addArtist(id);
-    } else {
-      throw new BadRequestException();
-    }
+  addArtistToFavorites(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return this.favoritesService.addArtist(id);
   }
+
   @Delete('artist/:id')
   @HttpCode(204)
-  deleteArtistFromFavorites(@Param('id') id: string) {
-    if (validate(id)) {
-      return this.favoritesService.deleteArtist(id);
-    } else {
-      throw new BadRequestException();
-    }
+  deleteArtistFromFavorites(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return this.favoritesService.deleteArtist(id);
   }
 }

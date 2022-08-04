@@ -30,12 +30,11 @@ export class TracksService {
   };
 
   findOne = async (id: string) => {
-    const track = await this.trackRepository.findOne({ where: { id: id } });
-    if (track) {
-      return track;
-    } else {
+    const track = await this.trackRepository.findOneBy({ id });
+    if (!track) {
       throw new NotFoundException('Track with this id not found');
     }
+    return track;
   };
 
   update = async (id: string, updateTrackDto: UpdateTrackDto) => {

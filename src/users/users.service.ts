@@ -40,9 +40,7 @@ export class UsersService {
   };
 
   update = async (id: string, updateUserDto: UpdateUserDto) => {
-    const updatedUser = await this.userRepository.findOne({
-      where: { id: id },
-    });
+    const updatedUser = await this.findOne(id);
     if (updatedUser.password !== updateUserDto.oldPassword) {
       throw new ForbiddenException();
     }
