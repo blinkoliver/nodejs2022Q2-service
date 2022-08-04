@@ -30,9 +30,7 @@ export class FavoritesService {
 
   getFavorites = async () => {
     const favorites = await this.favoritesRepository.find();
-    console.log('FAVORITES', favorites);
-    console.log(favorites.map((el) => el.toResponse()));
-    return favorites.map((el) => el.toResponse());
+    return favorites.find(() => true);
   };
 
   addTrack = async (id: string) => {
@@ -41,76 +39,75 @@ export class FavoritesService {
       id: id,
     });
     if (!track) {
-      throw new UnprocessableEntityException(`Track ${id} not found.`);
+      throw new UnprocessableEntityException(`Track not found.`);
     }
-    // if (!this.isExist(favorites.tracks, id)) {
-    //   favorites.tracks.push(track);
-    // }
-    console.log('FAVORITES', favorites);
+    if (!this.isExist(favorites.tracks, id)) {
+      favorites.tracks.push(track);
+    }
     await this.favoritesRepository.save(favorites);
     return { result: `Track was added to favorites.` };
   };
 
   addArtist = async (id: string) => {
-    // const favorites = await this.getFavorites();
-    // const artist: Artist | null = await this.artistsRepository.findOneBy({
-    //   id: id,
-    // });
-    // if (!artist) {
-    //   throw new UnprocessableEntityException(`Artist ${id} not found.`);
-    // }
-    // if (!this.isExist(favorites.artists, id)) {
-    //   favorites.artists.push(artist);
-    // }
-    // await this.favoritesRepository.save(favorites);
-    // return { result: `Artist was added to favorites.` };
+    const favorites = await this.getFavorites();
+    const artist: Artist | null = await this.artistsRepository.findOneBy({
+      id: id,
+    });
+    if (!artist) {
+      throw new UnprocessableEntityException(`Artist ${id} not found.`);
+    }
+    if (!this.isExist(favorites.artists, id)) {
+      favorites.artists.push(artist);
+    }
+    await this.favoritesRepository.save(favorites);
+    return { result: `Artist was added to favorites.` };
   };
 
   addAlbum = async (id: string) => {
-    // const favorites = await this.getFavorites();
-    // const album: Album | null = await this.albumsRepository.findOneBy({
-    //   id: id,
-    // });
-    // if (!album) {
-    //   throw new UnprocessableEntityException(`Album ${id} not found.`);
-    // }
-    // if (!this.isExist(favorites.albums, id)) {
-    //   favorites.albums.push(album);
-    // }
-    // await this.favoritesRepository.save(favorites);
-    // return { result: `Album  was added to favorites.` };
+    const favorites = await this.getFavorites();
+    const album: Album | null = await this.albumsRepository.findOneBy({
+      id: id,
+    });
+    if (!album) {
+      throw new UnprocessableEntityException(`Album ${id} not found.`);
+    }
+    if (!this.isExist(favorites.albums, id)) {
+      favorites.albums.push(album);
+    }
+    await this.favoritesRepository.save(favorites);
+    return { result: `Album  was added to favorites.` };
   };
 
   deleteArtist = async (id: string) => {
-    // const favorites = await this.getFavorites();
-    // if (!this.isExist(favorites.artists, id)) {
-    //   throw new NotFoundException(`Artist was not in favorites.`);
-    // }
-    // favorites.artists = favorites.artists.filter((artist: Artist) => {
-    //   return artist.id !== id;
-    // });
-    // await this.favoritesRepository.save(favorites);
+    const favorites = await this.getFavorites();
+    if (!this.isExist(favorites.artists, id)) {
+      throw new NotFoundException(`Artist was not in favorites.`);
+    }
+    favorites.artists = favorites.artists.filter((artist: Artist) => {
+      return artist.id !== id;
+    });
+    await this.favoritesRepository.save(favorites);
   };
 
   deleteTrack = async (id: string) => {
-    // const favorites = await this.getFavorites();
-    // if (!this.isExist(favorites.tracks, id)) {
-    //   throw new NotFoundException(`Track was not in favorites.`);
-    // }
-    // favorites.tracks = favorites.tracks.filter((track: Track) => {
-    //   return track.id !== id;
-    // });
-    // await this.favoritesRepository.save(favorites);
+    const favorites = await this.getFavorites();
+    if (!this.isExist(favorites.tracks, id)) {
+      throw new NotFoundException(`Track was not in favorites.`);
+    }
+    favorites.tracks = favorites.tracks.filter((track: Track) => {
+      return track.id !== id;
+    });
+    await this.favoritesRepository.save(favorites);
   };
 
   deleteAlbum = async (id: string) => {
-    //   const favorites = await this.getFavorites();
-    //   if (!this.isExist(favorites.albums, id)) {
-    //     throw new NotFoundException(`Album was not in favorites.`);
-    //   }
-    //   favorites.albums = favorites.albums.filter((album: Album) => {
-    //     return album.id !== id;
-    //   });
-    //   await this.favoritesRepository.save(favorites);
+    const favorites = await this.getFavorites();
+    if (!this.isExist(favorites.albums, id)) {
+      throw new NotFoundException(`Album was not in favorites.`);
+    }
+    favorites.albums = favorites.albums.filter((album: Album) => {
+      return album.id !== id;
+    });
+    await this.favoritesRepository.save(favorites);
   };
 }

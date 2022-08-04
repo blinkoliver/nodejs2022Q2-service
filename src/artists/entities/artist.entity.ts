@@ -24,9 +24,4 @@ export class Artist extends BaseEntity {
 
   @OneToMany(() => Track, (track) => track.artist)
   tracks: Track[];
-
-  toResponse() {
-    const { id, name, grammy, albums, tracks } = this;
-    return { id, name, grammy, albums, tracks };
-  }
 }

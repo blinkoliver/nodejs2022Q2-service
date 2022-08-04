@@ -19,36 +19,35 @@ export class AlbumsService {
   create = async (createAlbumDto: CreateAlbumDto) => {
     try {
       const createdAlbum = this.albumRepository.create(createAlbumDto);
-      return (await this.albumRepository.save(createdAlbum)).toResponse();
+      return await this.albumRepository.save(createdAlbum);
     } catch (error) {
       throw new BadRequestException();
     }
   };
 
   findAll = async () => {
-    const albums = await this.albumRepository.find();
-    return albums.map((el) => el.toResponse());
+    return await this.albumRepository.find();
   };
 
   findOne = async (id: string) => {
     const album = await this.albumRepository.findOne({ where: { id: id } });
     if (album) {
-      return album.toResponse();
+      return album;
     } else {
       throw new NotFoundException('Album with this id not found');
     }
   };
 
   update = async (id: string, updateAlbumDto: UpdateAlbumDto) => {
-    const updatedAlbum = await this.albumRepository.findOne({
-      where: { id: id },
-    });
-    if (updatedAlbum) {
-      Object.assign(updatedAlbum, updateAlbumDto);
-      return await this.albumRepository.save(updatedAlbum);
-    } else {
-      throw new NotFoundException('Album with this id not found');
+    await this.findOne(id);
+
+    try {
+      await this.albumRepository.update(id, updateAlbumDto);
+    } catch (error) {
+      throw new BadRequestException('Invalid album data.');
     }
+
+    return await this.findOne(id);
   };
 
   remove = async (id: string) => {

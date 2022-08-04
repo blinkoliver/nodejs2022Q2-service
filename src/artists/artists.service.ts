@@ -14,33 +14,26 @@ export class ArtistsService {
 
   create = async (createArtistDto: CreateArtistDto) => {
     const createdArtist = this.artistRepository.create(createArtistDto);
-    return (await this.artistRepository.save(createdArtist)).toResponse();
+    return await this.artistRepository.save(createdArtist);
   };
 
   findAll = async () => {
-    const artists = await this.artistRepository.find();
-    return artists.map((el) => el.toResponse());
+    return await this.artistRepository.find();
   };
 
   findOne = async (id: string) => {
     const artist = await this.artistRepository.findOne({ where: { id: id } });
     if (artist) {
-      return artist.toResponse();
+      return artist;
     } else {
       throw new NotFoundException('Artist with this id not found');
     }
   };
 
   update = async (id: string, updateArtistDto: UpdateArtistDto) => {
-    const updatedArtist = await this.artistRepository.findOne({
-      where: { id: id },
-    });
-    if (updatedArtist) {
-      Object.assign(updatedArtist, updateArtistDto);
-      return await this.artistRepository.save(updatedArtist);
-    } else {
-      throw new NotFoundException('Artist with this id not found');
-    }
+    await this.findOne(id);
+    await this.artistRepository.update(id, updateArtistDto);
+    return await this.findOne(id);
   };
 
   remove = async (id: string) => {

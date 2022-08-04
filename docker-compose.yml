@@ -1,42 +1,37 @@
 version: '3.3'
 services:
-  server:
-    container_name: rest-api-server
-    image: blivkoliver/rest-api-server
+  api:
     build: .
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - .:/usr/app
+      - /usr/app/node_modules
     ports:
       - ${PORT}:${PORT}
+    env_file:
+      - .env
     networks:
-      - rest-network
+      - homelibrary
     depends_on:
-      - postgres
-    environment:
-      - PORT=${PORT}
+      - db
     restart: unless-stopped
     command: sh -c 'npm run typeorm:migration && npm run start:dev'
-  postgres:
-    container_name: rest-api-db
-    image: blinkoliver/rest-api-db
-    build: ./db/
-    command: postgres -c logging_collector=on
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    networks:
-      - rest-network
+  db:
+    build: ./database/
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=${POSTGRES_HOST}
+      - PG_DATA=${POSTGRES_DB_DATA_PATH}
+    volumes:
+      - db-data:${POSTGRES_DB_DATA_PATH}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     restart: unless-stopped
+    networks:
+      - homelibrary
 
 networks:
-  rest-network:
+  homelibrary:
     driver: bridge
 volumes:
-  pgdata:
+  db-data:

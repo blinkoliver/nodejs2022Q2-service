@@ -5,14 +5,12 @@ import {
   Entity,
   Index,
   PrimaryGeneratedColumn,
-  Unique,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 
 @Entity('user')
-@Unique(['login'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -29,13 +27,10 @@ export class User extends BaseEntity {
   version: number;
 
   @CreateDateColumn()
+  @Type(() => Number)
   createdAt: number;
 
   @UpdateDateColumn()
+  @Type(() => Number)
   updatedAt: number;
-
-  toResponse() {
-    const { id, login } = this;
-    return { id, login };
-  }
 }

@@ -20,21 +20,20 @@ export class UsersService {
   create = async (createUserDto: CreateUserDto) => {
     try {
       const createdUser = this.userRepository.create(createUserDto);
-      return (await this.userRepository.save(createdUser)).toResponse();
+      return await this.userRepository.save(createdUser);
     } catch (error) {
       throw new BadRequestException();
     }
   };
 
   findAll = async () => {
-    const users = await this.userRepository.find();
-    return users.map((el) => el.toResponse());
+    return await this.userRepository.find();
   };
 
   findOne = async (id: string) => {
     const user = await this.userRepository.findOne({ where: { id: id } });
     if (user) {
-      return user.toResponse();
+      return user;
     } else {
       throw new NotFoundException('User with this id not found');
     }
@@ -48,7 +47,7 @@ export class UsersService {
       throw new ForbiddenException();
     }
     updatedUser.password = updateUserDto.newPassword;
-    return (await this.userRepository.save(updatedUser)).toResponse();
+    return await this.userRepository.save(updatedUser);
   };
 
   remove = async (id: string) => {

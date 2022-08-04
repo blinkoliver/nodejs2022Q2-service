@@ -1,7 +1,7 @@
-FROM node:lts-alpine3.16 as Dev
-WORKDIR /usr/src/app
+FROM node:lts-alpine3.16
+WORKDIR /usr/app
 COPY package*.json ./
-RUN ["npm", "ci", "--legacy-peer-deps"]
+RUN ["npm", "install", "--legacy-peer-deps"]
 COPY . .
 EXPOSE ${PORT}
 RUN [ "npm", "run", "build"]

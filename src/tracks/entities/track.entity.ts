@@ -33,9 +33,4 @@ export class Track extends BaseEntity {
 
   @Column({ type: 'varchar' })
   duration: number;
-
-  toResponse() {
-    const { id, name, albumId, artistId, duration, artist, album } = this;
-    return { id, name, albumId, artistId, duration, artist, album };
-  }
 }

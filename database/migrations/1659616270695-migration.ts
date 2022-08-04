@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class migration1659079224714 implements MigrationInterface {
-  name = 'migration1659079224714';
+export class migration1659616270695 implements MigrationInterface {
+  name = 'migration1659616270695';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -15,20 +15,20 @@ export class migration1659079224714 implements MigrationInterface {
             )
         `);
     await queryRunner.query(`
-            CREATE TABLE "artist" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "name" character varying NOT NULL,
-                "grammy" boolean NOT NULL,
-                CONSTRAINT "PK_55b76e71568b5db4d01d3e394ed" PRIMARY KEY ("id")
-            )
-        `);
-    await queryRunner.query(`
             CREATE TABLE "album" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "name" character varying NOT NULL,
                 "year" integer,
                 "artistId" character varying,
                 CONSTRAINT "PK_58e0b4b8a31bb897e6959fe3206" PRIMARY KEY ("id")
+            )
+        `);
+    await queryRunner.query(`
+            CREATE TABLE "artist" (
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+                "name" character varying NOT NULL,
+                "grammy" boolean NOT NULL,
+                CONSTRAINT "PK_55b76e71568b5db4d01d3e394ed" PRIMARY KEY ("id")
             )
         `);
     await queryRunner.query(`
@@ -45,7 +45,6 @@ export class migration1659079224714 implements MigrationInterface {
                 "version" integer NOT NULL,
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
-                CONSTRAINT "UQ_a62473490b3e4578fd683235c5e" UNIQUE ("login"),
                 CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
             )
         `);
@@ -189,10 +188,10 @@ export class migration1659079224714 implements MigrationInterface {
             DROP TABLE "favorites"
         `);
     await queryRunner.query(`
-            DROP TABLE "album"
+            DROP TABLE "artist"
         `);
     await queryRunner.query(`
-            DROP TABLE "artist"
+            DROP TABLE "album"
         `);
     await queryRunner.query(`
             DROP TABLE "track"

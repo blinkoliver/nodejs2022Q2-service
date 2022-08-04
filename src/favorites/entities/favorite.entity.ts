@@ -21,9 +21,4 @@ export class Favorites {
   @ManyToMany(() => Track, { onDelete: 'CASCADE' })
   @JoinTable()
   tracks: Track[];
-
-  toResponse() {
-    const { id, artists, albums, tracks } = this;
-    return { id, artists, albums, tracks };
-  }
 }

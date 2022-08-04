@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
@@ -13,40 +17,39 @@ export class TracksService {
   ) {}
 
   create = async (createTrackDto: CreateTrackDto) => {
-    const createdTrack = this.trackRepository.create(createTrackDto);
-    return (await this.trackRepository.save(createdTrack)).toResponse();
+    try {
+      const createdTrack = this.trackRepository.create(createTrackDto);
+      return await this.trackRepository.save(createdTrack);
+    } catch (error) {
+      throw new BadRequestException();
+    }
   };
 
   findAll = async () => {
-    const tracks = await this.trackRepository.find();
-    return tracks.map((el) => el.toResponse());
+    return await this.trackRepository.find();
   };
 
   findOne = async (id: string) => {
     const track = await this.trackRepository.findOne({ where: { id: id } });
     if (track) {
-      return track.toResponse();
+      return track;
     } else {
       throw new NotFoundException('Track with this id not found');
     }
   };
 
   update = async (id: string, updateTrackDto: UpdateTrackDto) => {
-    const updatedTrack = await this.trackRepository.findOne({
-      where: { id: id },
-    });
-    if (updatedTrack) {
-      Object.assign(updatedTrack, updateTrackDto);
-      return await this.trackRepository.save(updatedTrack);
-    } else {
-      throw new NotFoundException('Track with this id not found');
+    await this.findOne(id);
+    try {
+      await this.trackRepository.update(id, updateTrackDto);
+    } catch (error) {
+      throw new BadRequestException('Invalid track data.');
     }
+    return await this.findOne(id);
   };
 
   remove = async (id: string) => {
-    const result = await this.trackRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('Track with this id not found');
-    }
+    await this.findOne(id);
+    await this.trackRepository.delete(id);
   };
 }
