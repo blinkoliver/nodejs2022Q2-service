@@ -1,16 +1,16 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class migration1659625219360 implements MigrationInterface {
-  name = 'migration1659625219360';
+export class migration1659626580158 implements MigrationInterface {
+  name = 'migration1659626580158';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             CREATE TABLE "track" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "name" character varying NOT NULL,
-                "duration" integer NOT NULL,
                 "artistId" uuid,
                 "albumId" uuid,
+                "duration" character varying NOT NULL,
                 CONSTRAINT "PK_0631b9bcf521f8fab3a15f2c37e" PRIMARY KEY ("id")
             )
         `);

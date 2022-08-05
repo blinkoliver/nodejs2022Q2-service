@@ -8,6 +8,8 @@ import { TracksModule } from './tracks/tracks.module';
 import { ArtistsModule } from './artists/artists.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ormConfig } from '../orm-config';
+import { APP_GUARD } from '@nestjs/core';
+// import {JwtAuthGuard} from ""
 
 @Module({
   imports: [

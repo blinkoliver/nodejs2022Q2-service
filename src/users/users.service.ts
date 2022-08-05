@@ -39,6 +39,10 @@ export class UsersService {
     }
   };
 
+  findByLogin = async (login: string) => {
+    return await this.userRepository.findOne({ where: { login } });
+  };
+
   update = async (id: string, updateUserDto: UpdateUserDto) => {
     const updatedUser = await this.findOne(id);
     if (updatedUser.password !== updateUserDto.oldPassword) {
