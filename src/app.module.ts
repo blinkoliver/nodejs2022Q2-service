@@ -9,7 +9,8 @@ import { ArtistsModule } from './artists/artists.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ormConfig } from '../orm-config';
 import { APP_GUARD } from '@nestjs/core';
-// import {JwtAuthGuard} from ""
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,8 +23,9 @@ import { APP_GUARD } from '@nestjs/core';
     AlbumsModule,
     FavoritesModule,
     ArtistsModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}

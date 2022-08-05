@@ -7,14 +7,19 @@
 - Docker Engine - [Download & Install Docker Engine](https://docs.docker.com/engine/)
 - Docker Desktop - [Download & Install Docker Desktop (OPTIONAL)](https://www.docker.com/products/docker-desktop/)
 
-## Downloading Images
+## Clone repo and checkout to authentication brunch
 
 ```
-docker pull blinkoliver/rest-api:server
+git clone https://github.com/blinkoliver/nodejs2022Q2-service/tree/authentication
+```
 
-docker pull blinkoliver/rest-api:latest
+## Instal modules
 
 ```
+npm i
+```
+
+## Create .env file by env.example
 
 ## Running app with docker-compose
 
@@ -28,10 +33,6 @@ After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
-## Containers size
-
-![SCREENSHOT](Screenshot.png)
-
 ## Testing
 
 After application running open new terminal and enter:
@@ -39,23 +40,5 @@ After application running open new terminal and enter:
 To run all tests without authorization
 
 ```
-npm run test
-```
-
-To run only one of all test suites
-
-```
-npm run test -- <path to suite>
-```
-
-To run all test with authorization
-
-```
 npm run test:auth
-```
-
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
 ```
