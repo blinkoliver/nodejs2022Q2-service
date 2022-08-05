@@ -9,7 +9,7 @@ import { ArtistsModule } from './artists/artists.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ormConfig } from '../orm-config';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 
 @Module({

@@ -249,6 +249,92 @@ paths:
           description: Bad request. userId is invalid (not uuid)
         404:
           description: User not found
+  /auth/signup:
+    post:
+      tags:
+        - Sign
+      summary: auth user
+      description: auth user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: The user's login
+                password:
+                  type: string
+                  description: The user's password
+              required:
+                - login
+                - password
+      responses:
+        201:
+          description: Valid
+        400:
+          description: Invalid dto
+  /auth/login:
+    post:
+      tags:
+        - Login
+      summary: login user
+      description: login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: The user's login
+                password:
+                  type: string
+                  description: The user's password
+              required:
+                - login
+                - password
+      responses:
+        200:
+          description: Valid token
+        400:
+          description: Invalid dto
+        403:
+          description: Refresh token is invalid or expired
+  /auth/refresh:
+    post:
+      tags:
+        - Refresh
+      summary: refresh token
+      description: refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: The user's login
+                password:
+                  type: string
+                  description: The user's password
+              required:
+                - login
+                - password
+      responses:
+        201:
+          description: Valid
+        400:
+          description: Invalid dto
   /track:
     get:
       tags:

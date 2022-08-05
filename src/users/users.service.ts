@@ -9,6 +9,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import 'dotenv/config';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +21,9 @@ export class UsersService {
 
   create = async (createUserDto: CreateUserDto) => {
     try {
+      const { password } = createUserDto;
+      const salt = parseInt(process.env.CRYPT_SALT);
+      createUserDto.password = await bcrypt.hash(password, salt);
       const createdUser = this.userRepository.create(createUserDto);
       return await this.userRepository.save(createdUser);
     } catch (error) {
@@ -45,10 +50,13 @@ export class UsersService {
 
   update = async (id: string, updateUserDto: UpdateUserDto) => {
     const updatedUser = await this.findOne(id);
-    if (updatedUser.password !== updateUserDto.oldPassword) {
-      throw new ForbiddenException();
+    const { oldPassword, newPassword } = updateUserDto;
+    const isMatch = await bcrypt.compare(oldPassword, updatedUser.password);
+    if (!isMatch) {
+      new ForbiddenException('Incorrect password');
     }
-    updatedUser.password = updateUserDto.newPassword;
+    const salt = parseInt(process.env.CRYPT_SALT);
+    updatedUser.password = await bcrypt.hash(newPassword, salt);
     return await this.userRepository.save(updatedUser);
   };
 

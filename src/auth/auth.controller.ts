@@ -4,14 +4,13 @@ import {
   Controller,
   HttpCode,
   Post,
-  Request,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { Public } from './guards/jwt-auth.guard';
+import { Public } from './guard/jwt-auth.guard';
+import { LoginDto } from './dto/login.dto';
+import { RefreshDto } from './dto/refresh.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -26,19 +25,18 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(LocalAuthGuard)
   @Post('/login')
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(200)
-  async login(@Request() req) {
-    return await this.authService.login(req.user);
+  async login(@Body() loginDto: LoginDto) {
+    return await this.authService.login(loginDto);
   }
 
   @Public()
   @Post('/refresh')
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(200)
-  async refresh(@Request() req) {
-    return await this.authService.refresh(req.body);
+  async refresh(@Body() refreshDto: RefreshDto) {
+    return await this.authService.refresh(refreshDto);
   }
 }

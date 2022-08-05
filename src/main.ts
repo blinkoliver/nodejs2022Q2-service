@@ -6,10 +6,13 @@ import { parse } from 'yaml';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
+import { CustomLogger } from './logger/CustomLogger';
 
 async function bootstrap() {
   const port = process.env.PORT || 4000;
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new CustomLogger(),
+  });
   app.useGlobalPipes(
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
   );
