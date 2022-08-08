@@ -1,26 +1,32 @@
-# Home Library Service
+# Home Library Service with Docker
 
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker Engine - [Download & Install Docker Engine](https://docs.docker.com/engine/)
+- Docker Desktop - [Download & Install Docker Desktop (OPTIONAL)](https://www.docker.com/products/docker-desktop/)
 
-## Downloading
-
-```
-git clone {repository URL}
-```
-
-## Installing NPM modules
+## Clone repo and checkout to authentication brunch
 
 ```
-npm install
+git clone https://github.com/blinkoliver/nodejs2022Q2-service/tree/authentication
 ```
 
-## Running application
+## Instal modules
 
 ```
-npm start
+npm i
+```
+
+## Create .env file by env.example
+
+## Running app with docker-compose
+
+```
+docker-compose build
+
+docker-compose up
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -34,39 +40,5 @@ After application running open new terminal and enter:
 To run all tests without authorization
 
 ```
-npm run test
-```
-
-To run only one of all test suites
-
-```
-npm run test -- <path to suite>
-```
-
-To run all test with authorization
-
-```
 npm run test:auth
 ```
-
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
-```
-
-### Auto-fix and format
-
-```
-npm run lint
-```
-
-```
-npm run format
-```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
